@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Role-specific Student Record System dashboard">
+  <title>Dashboard | Student Record System</title>
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">S</div>
+      <div>
+        <strong>StudentHub</strong>
+        <span>RECORD SYSTEM</span>
+      </div>
+    </div>
+
+    <p class="nav-label">WORKSPACE</p>
+    <nav>
+      <a class="nav-link active" href="/">▦ <span>Dashboard</span></a>
+      <a class="nav-link" href="#summaries">▤ <span>Academic overview</span></a>
+      <a class="nav-link" href="#alerts">♧ <span>Alerts</span></a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="profile-avatar">U</div>
+      <div class="profile-info">
+        <strong id="sidebar-name">Demo User</strong>
+        <span id="sidebar-role">Administrator</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">STUDENT RECORD SYSTEM</p>
+        <h1 id="welcome-title">Welcome back</h1>
+        <p class="muted">Here is your academic overview for today.</p>
+      </div>
+      <div class="role-control">
+        <label for="role-select">Preview dashboard</label>
+        <select id="role-select">
+          <option value="ADMIN">Administrator</option>
+          <option value="FACULTY">Faculty</option>
+          <option value="STUDENT">Student</option>
+        </select>
+      </div>
+    </header>
+
+    <section class="demo-notice">
+      <strong>Demo preview</strong>
+      <span>Sample figures and alerts are shown. They are not live database records.</span>
+    </section>
+
+    <section class="welcome-panel">
+      <div>
+        <p class="eyebrow" id="role-eyebrow">ADMINISTRATOR WORKSPACE</p>
+        <h2 id="panel-title">Your institution at a glance</h2>
+        <p id="panel-description">Review key summaries and keep track of important updates.</p>
+      </div>
+      <div class="welcome-symbol" aria-hidden="true">▦</div>
+    </section>
+
+    <section id="summaries" class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Overview</h2>
+          <p class="muted">Information relevant to your role</p>
+        </div>
+      </div>
+      <div id="summary-grid" class="summary-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="alerts" class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Important updates</h2>
+          <p class="muted">Items that may need your attention</p>
+        </div>
+      </div>
+      <div id="alert-list" class="alert-list" aria-live="polite"></div>
+    </section>
+
+    <footer>
+      Student Record System <span>·</span> Role-Specific Dashboard
+    </footer>
+  </main>
+
+  <script src="/js/dashboard.js" defer></script>
+</body>
+</html>
