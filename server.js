@@ -8,8 +8,7 @@ const path = require('path');
 
 const healthRoutes = require('./src/routes/health.routes');
 const authRoutes = require('./src/routes/auth.routes');
-const { authenticate } = require('./src/middleware/auth.middleware');
-const { authorizeRoles } = require('./src/middleware/authorize.middleware');
+const studentRoutes = require('./src/routes/student.routes');
 
 const app = express();
 
@@ -28,25 +27,8 @@ app.get('/api', (req, res) => {
 });
 
 app.use('/api/health', healthRoutes);
-
 app.use('/api/auth', authRoutes);
-
-// Protected endpoint for testing role-based access.
-app.get(
-  '/api/admin/access-check',
-  authenticate,
-  authorizeRoles('ADMIN'),
-  (req, res) => {
-    res.json({
-      message: 'Admin access granted.',
-      user: {
-        userId: req.user.user_id,
-        username: req.user.username,
-        role: req.user.role,
-      },
-    });
-  }
-);
+app.use('/api/students', studentRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
