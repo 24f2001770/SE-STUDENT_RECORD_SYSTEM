@@ -11,7 +11,6 @@ exports.createStudent = async (req, res, next) => {
       semester,
     } = req.body;
 
-    // Validate required fields.
     const requiredFields = {
       student_id,
       full_name,
@@ -78,7 +77,31 @@ exports.createStudent = async (req, res, next) => {
       });
     }
 
-    const [result] = await pool.execute(
+    // Explicitly check whether the student ID already exists.
+    const [existingStudents] = await pool.execute(
+      'SELECT student_id FROM students WHERE student_id = ?',
+      [studentId]
+    );
+
+    if (existingStudents.length > 0) {
+      return res.status(409).json({
+        error: 'Student ID already exists. Please use a unique student ID.',
+      });
+    }
+
+    // Check whether the email is already registered.
+    const [existingEmails] = await pool.execute(
+      'SELECT email FROM students WHERE email = ?',
+      [studentEmail]
+    );
+
+    if (existingEmails.length > 0) {
+      return res.status(409).json({
+        error: 'Email address is already registered.',
+      });
+    }
+
+    await pool.execute(
       `INSERT INTO students
         (student_id, full_name, email, department, semester)
        VALUES (?, ?, ?, ?, ?)`,
@@ -102,9 +125,23 @@ exports.createStudent = async (req, res, next) => {
       },
     });
   } catch (error) {
+    // Database constraints remain the final protection against
+    // duplicate entries, including simultaneous requests.
     if (error.code === 'ER_DUP_ENTRY') {
+      if (error.message.includes('PRIMARY')) {
+        return res.status(409).json({
+          error: 'Student ID already exists.',
+        });
+      }
+
+      if (error.message.includes('email')) {
+        return res.status(409).json({
+          error: 'Email address is already registered.',
+        });
+      }
+
       return res.status(409).json({
-        error: 'A student with this ID or email already exists',
+        error: 'A duplicate student record already exists.',
       });
     }
 
