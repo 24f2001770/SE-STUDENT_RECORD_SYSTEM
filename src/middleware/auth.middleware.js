@@ -12,8 +12,10 @@ async function authenticate(req, res, next) {
     });
   }
 
-  if (!process.env.JWT_SECRET ||
-      process.env.JWT_SECRET.length < 32) {
+  if (
+    !process.env.JWT_SECRET ||
+    process.env.JWT_SECRET.length < 32
+  ) {
     return res.status(500).json({
       error: 'Authentication is not configured.',
     });
@@ -23,7 +25,7 @@ async function authenticate(req, res, next) {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
 
     const [users] = await pool.execute(
-      `SELECT user_id, username, role
+      `SELECT user_id, username, role, student_id
        FROM users
        WHERE user_id = ? AND role = ?`,
       [payload.sub, payload.role]

@@ -24,3 +24,24 @@ CREATE TABLE IF NOT EXISTS users (
         REFERENCES students(student_id)
         ON DELETE SET NULL
 );
+
+CREATE TABLE IF NOT EXISTS academic_records (
+    record_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    student_id VARCHAR(20) NOT NULL,
+    course_code VARCHAR(20) NOT NULL,
+    course_name VARCHAR(150) NOT NULL,
+    semester TINYINT UNSIGNED NOT NULL,
+    academic_year VARCHAR(9) NOT NULL,
+    grade VARCHAR(5),
+    credits DECIMAL(4,1) NOT NULL,
+    status ENUM('COMPLETED', 'FAILED') NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    INDEX idx_academic_student (student_id),
+    INDEX idx_academic_semester (student_id, semester),
+
+    CONSTRAINT fk_academic_student
+        FOREIGN KEY (student_id)
+        REFERENCES students(student_id)
+        ON DELETE CASCADE
+);
